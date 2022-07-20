@@ -1,0 +1,57 @@
+<div id="conversations" v-cloak>
+  <div class="container mt-4">
+    <div class="row">
+          <div class="col-md-11 mx-auto">
+              <div class="card">
+                  <div class="card-header text-center">
+                      <span>Chat Box</span>
+                  </div>
+                  <div class="card-body chat-care">
+                      <ul class="chat">
+                        <span v-for="conv in conversations">
+                            <li class="admin clearfix" v-if="me.id === conv.sender.id">
+                                <span class="chat-img right clearfix  mx-2">
+                                    <img src="/images/default_avatar.jpg" width="60px" height="60px" alt="Admin" class="img-circle" />
+                                </span>
+                                <div class="chat-body clearfix">
+                                    <div class="header clearfix">
+                                        <small class="left text-muted pr-2"><span class="glyphicon glyphicon-time"></span>{{momentFromNow(conv.sent_at)}}</small>
+                                        <strong class="right primary-font">{{conv.sender.fullName}}</strong>
+                                    </div>
+                                    <p>
+                                        {{conv.message}}
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="agent clearfix" v-else>
+                                <span class="chat-img left clearfix mx-2">
+                                    <img src="/images/default_avatar.jpg" width="60px" height="60px" alt="Agent" class="img-circle" />
+                                </span>
+                                <div class="chat-body clearfix">
+                                    <div class="header clearfix">
+                                        <strong class="primary-font pr-2">{{conv.sender.fullName}}</strong> <small class="right text-muted">
+                                            <span class="glyphicon glyphicon-time"></span>{{momentFromNow(conv.sent_at)}}</small>
+                                    </div>
+                                    <p>
+                                        {{conv.message}}
+                                    </p>
+                                </div>
+                            </li>
+                        </span>
+                      </ul>
+                  </div>
+                  <div class="card-footer">
+                      <div class="input-group">
+                        <input type="hidden" name="_csrf" value="<%- _csrf %>" id="_csrf" />
+                          <input id="btn-input" type="text" v-model.trim="formData.message" class="form-control input-sm" placeholder="Type your message here..." />
+                          <span class="input-group-btn">
+                            <button :syncing="syncing" v-on:click="sendMessage" :disabled="formData.message == null || formData.message == ''" class="btn btn-primary">Send</button>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
